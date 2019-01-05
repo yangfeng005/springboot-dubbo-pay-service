@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jp.common.pay.dao.customized.OrderCustomizedMapper" >
+  <resultMap id="ProductPayResultMap" type="com.jp.common.pay.dto.ProductPayRes" >
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_file_id" property="productFileId" jdbcType="VARCHAR" />
+    <result column="user_count" property="userCount" jdbcType="INTEGER" />
+    <result column="pay_money_count" property="payMoneyCount" jdbcType="DECIMAL" />
+  </resultMap>
+
+  <select id="getDonateInfoOfProduct" resultMap="ProductPayResultMap">
+        SELECT
+            od.product_id,
+            p.product_name,
+            p.product_file_id,
+            count(user_id) as user_count,
+            sum(actually_pay_money) as pay_money_count
+        FROM
+            `jp_order` o
+        LEFT JOIN jp_order_detail od ON o.order_number = od.order_number
+        LEFT JOIN jp_pay_detail pd ON pd.order_number = od.order_number
+        LEFT JOIN jp_product p ON p.id = od.product_id
+        WHERE
+            od.product_id = #{productId,jdbcType=VARCHAR}
+        AND o.pay_type = #{payType,jdbcType=INTEGER}
+        AND o.purchase_type = #{purchaseType,jdbcType=INTEGER}
+        AND pd.pay_status = 1
+        GROUP BY
+            od.product_id,
+            p.product_name,
+            p.product_file_id
+  </select>
+
+  <select id="getDonateInfoOfReport" resultMap="ProductPayResultMap">
+        SELECT
+            od.product_id,
+            qir.title product_name,
+            qir.thumbnail product_file_id,
+            count(user_id) as user_count,
+            sum(actually_pay_money) as pay_money_count
+        FROM
+            `jp_order` o
+        LEFT JOIN jp_order_detail od ON o.order_number = od.order_number
+        LEFT JOIN jp_pay_detail pd ON pd.order_number = od.order_number
+        LEFT JOIN jp_quality_inspect_report qir ON qir.id = od.product_id
+        WHERE
+            od.product_id = #{productId,jdbcType=VARCHAR}
+        AND o.pay_type = #{payType,jdbcType=INTEGER}
+        AND o.purchase_type = #{purchaseType,jdbcType=INTEGER}
+        AND pd.pay_status = 1
+        GROUP BY
+            od.product_id,
+            qir.title,
+            qir.thumbnail
+  </select>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2016-2014, CloudSub technology Co., Ltd.
+
+    All rights reserved.
+
+-->
+
+<!--
+    Description: dubbo 服务根配置。
+    Version: 1.0.1.1, Nov 22, 2016
+    Author: 
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+ 
+    <!-- 服务信息，用于计算依赖关系 -->
+    <dubbo:application name="file-service"/>
+ 
+    <!-- 使用Zookeeper注册中心 -->
+    <dubbo:registry address="${dubbo.registry.address}" timeout="60000"/>
+    <dubbo:protocol name="dubbo"  port="-1" />
+
+</beans>

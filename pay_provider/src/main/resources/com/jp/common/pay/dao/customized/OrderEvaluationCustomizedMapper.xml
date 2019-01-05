@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jp.common.pay.dao.customized.OrderEvaluationCustomizedMapper">
+
+    <select id="getDataProvideInfo" resultType="java.util.HashMap">
+        select c.provider, c.create_time from jp_order_evaluation a, jp_detect_data_type b, jp_detect_data c
+        where a.product_id = b.project_id and b.id = c.data_type_id and c.provider = a.user_id
+        and a.product_id = #{productId,jdbcType=VARCHAR} and a.user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+</mapper>
